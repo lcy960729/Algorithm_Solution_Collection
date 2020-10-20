@@ -14,8 +14,24 @@
 
 using namespace std;
 
-int dp(){
+int t, n;
+ll memo[65][10];
 
+ll dp(int num, int length){
+    if (length == n){
+        return 1;
+    }
+
+    ll &ret = memo[length][num];
+    if (ret != -1)
+        return ret;
+
+    ret = 0;
+    for (int i = num; i <= 9; i++){
+        ret += dp(i, length+1);
+    }
+
+    return ret;
 }
 
 int main(){
@@ -27,4 +43,19 @@ int main(){
     cin.tie(nullptr);
     cout.tie(nullptr);
 
+
+    cin >> t;
+
+    while(t--){
+        cin >> n;
+
+        memset(memo, -1, sizeof(memo));
+
+        ll ans = 0;
+        for (int i = 0; i <= 9; i++){
+            ans += dp(i,1);
+        }
+
+        cout << ans << "\n";
+    }
 }
