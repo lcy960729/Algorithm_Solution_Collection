@@ -40,7 +40,7 @@ void uni(int a, int b){
         d = parentB;
     }
 
-    parent[s] += parent[d];
+    parent[parentA] += parent[parentB];
     parent[d] = s;
 }
 
