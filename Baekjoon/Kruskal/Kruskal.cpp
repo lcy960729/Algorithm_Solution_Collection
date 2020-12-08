@@ -117,7 +117,6 @@ int main() {
     int result = 0, cnt = 0;
     memset(parent, -1, sizeof(parent));
 
-
     for (int i = 0;; i++) {
         if (uni(edge[i].u, edge[i].v)) {
             int u = edge[i].u;
