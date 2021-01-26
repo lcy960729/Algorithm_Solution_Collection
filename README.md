@@ -4,5 +4,5 @@
 ### 사용 언어  
 `C++`
 
-### My BaekJoon Account
+### BaekJoon Account
 https://www.acmicpc.net/user/lcy960729
