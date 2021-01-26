@@ -7,6 +7,7 @@
 #include <cstring>
 #include <vector>
 #include <queue>
+#include <set>
 
 #define pii pair<int, int>
 #define ll long long
@@ -15,43 +16,50 @@
 
 using namespace std;
 
-int N, M, A, B, C;
+int N, M, A, B;
+ll C;
 vector<pii > g[100001];
-int dist[100001];
-bool finished[100001];
+ll dist[100001];
 
-void dijk(int s, int limit) {
-    fill(dist, dist + N + 1, 1e9);
+struct Node {
+    ll cost;
+    int index;
 
-    priority_queue<pii > pq;
+    bool operator<(const Node &n1) const {
+        return this->cost < n1.cost;
+    }
+};
+
+bool dijk(int s, ll limit) {
+    fill(dist, dist + N + 1, LL_MAX);
+
+    priority_queue<Node> pq;
     pq.push({0, s});
     dist[s] = 0;
 
     while (!pq.empty()) {
-        pii cur = pq.top();
-        int curNode = cur.second;
+        Node cur = pq.top();
+        int curNode = cur.index;
         pq.pop();
 
-        if (dist[curNode] != -cur.first)
+        if (dist[curNode] != -cur.cost)
             continue;
 
-        for (pii next : g[cur.second]) {
+        for (pii next : g[cur.index]) {
             int nextNode = next.first;
             int weight = next.second;
 
+            if (dist[curNode] + weight > C || weight > limit)
+                continue;
+
             if (dist[nextNode] > dist[curNode] + weight) {
-
-                if (dist[curNode] + weight > C)
-                    continue;
-
-                if (weight > limit)
-                    continue;
-
                 dist[nextNode] = dist[curNode] + weight;
                 pq.push({-dist[nextNode], nextNode});
             }
         }
     }
+
+    return dist[B] != LL_MAX;
 }
 
 int main() {
@@ -73,21 +81,19 @@ int main() {
         g[e].push_back({s, c});
     }
 
-    int left = 1, right = 1e9, mid;
+    int left = 0, right = 1e9+1, mid;
 
     while (left + 1 < right) {
         mid = (left + right) / 2;
 
-        dijk(A, mid);
-
-        if (dist[B] != 1e9) {
+        if (dijk(A, mid)) {
             right = mid;
         } else {
             left = mid;
         }
     }
 
-    if (right == 1e9)
+    if (right == 1e9+1)
         cout << -1;
     else
         cout << right;

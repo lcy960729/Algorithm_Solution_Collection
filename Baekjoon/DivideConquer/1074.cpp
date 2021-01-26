@@ -1,69 +1,54 @@
 #include <iostream>
 #include <algorithm>
-#include<cmath>
+#include <cstring>
+#include <vector>
+#include <cmath>
+
+#define pii pair<int, int>
+#define ll long long
+#define Int_MAX 1e9
+#define LL_MAX 3e18
 
 using namespace std;
 
-long long r, c;
-long long cnt = 0;
-bool ret = false;
+int dx[] = {0, 1, 0, 1};
+int dy[] = {0, 0, 1, 1};
 
-bool dc(int n, int x, int y)
-{
-    if (n == 2)
-    {
-        if (x == r && y == c)
-        {
-            return true;
-        }
-        cnt++;
-
-        if (x == r && y + 1 == c)
-        {
-            return true;
-        }
-        cnt++;
-
-        if (x + 1 == r && y == c)
-        {
-            return true;
-        }
-        cnt++;
-
-        if (x + 1 == r && y + 1 == c)
-        {
-            return true;
-        }
-        cnt++;
-
-        return false;
-    }
-
-    if (!ret)
-        ret = dc(n/2, x, y);
-    if (!ret)
-        ret = dc(n/2, x, y+n/2);
-    if (!ret)
-        ret = dc(n/2, x+n/2, y);
-    if (!ret)
-        ret = dc(n/2, x+n/2, y+n/2);
-
-    return ret;
-}
-
-int main()
-{
+int main() {
 #ifdef LOCAL
     freopen("input.txt", "r", stdin);
 #endif
 
-    int n;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
-    cin >> n;
-    cin >> r;
-    cin >> c;
 
-    dc(pow(2,n), 0, 0);
+    ll n, r, c;
+    cin >> n >> r >> c;
 
-    cout << cnt;
+    int size = pow(2, n);
+
+    int ans = 0;
+
+    while (n--) {
+        size /= 2;
+        int index = 0;
+
+        if (c < size && r < size) {
+            index = 0;
+        } else if (c >= size && r < size) {
+            index = 1;
+        } else if (c < size && r >= size) {
+            index = 2;
+        } else if (c >= size && r >= size) {
+            index = 3;
+        }
+
+        c %= size;
+        r %= size;
+
+        ans += pow(size, 2) * index;
+    }
+    cout << ans;
 }

@@ -1,12 +1,9 @@
-//
-// Created by LeeChanYoung on 2020/12/11.
-//
-
 #include <iostream>
 #include <algorithm>
 #include <cstring>
 #include <vector>
-#include <deque>
+#include <cmath>
+#include <queue>
 
 #define pii pair<int, int>
 #define ll long long
@@ -14,9 +11,6 @@
 #define LL_MAX 3e18
 
 using namespace std;
-
-int K, N;
-pii cnt[300001];
 
 int main() {
 #ifdef LOCAL
@@ -27,34 +21,37 @@ int main() {
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    cin >> N >> K;
+    int n, k;
+    cin >> n >> k;
 
-    int check = 0;
-    for (int i = 1; i <= K; i++) {
-        cin >> cnt[i].first;
-        cnt[i].second = i;
-
-        check = max(check, cnt[i].first);
+    vector<pii > c(k);
+    int mx = 0;
+    for (int i = 0; i < c.size(); ++i) {
+        cin >> c[i].first;
+        c[i].second = i + 1;
+        mx = max(mx, c[i].first);
     }
 
-    if (check > (N + 1) / 2) {
+    if (mx > (n + 1) / 2) {
         cout << -1;
         return 0;
     }
 
-    sort(cnt + 1, cnt + K + 1, greater<>());
+    sort(c.rbegin(), c.rend());
 
-    deque<int> ans;
-    for (int i = 1; i <= K; i++) {
-        for (int j = 0; j < cnt[i].first; j++) {
-            ans.push_back(cnt[i].second);
+    int index = 0;
+    vector<int> ans(n);
+    for (int i = 0; i < c.size(); ++i) {
+        for (int j = 0; j < c[i].first; ++j) {
+            ans[index] = c[i].second;
+            index += 2;
+
+            if (index >= n)
+                index = 1;
         }
     }
-    for (int i = 0; i < (n + 1) / 2; i++) {
-        a[i*2]
-    }
 
-    for (int a : ans) {
-        cout << a << " ";
+    for (auto i : ans) {
+        cout << i << ' ';
     }
 }

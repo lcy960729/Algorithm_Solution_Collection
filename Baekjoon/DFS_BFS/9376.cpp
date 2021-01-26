@@ -26,12 +26,13 @@ struct node {
     int y;
 };
 
-void bfs(node start, int (*memo)[105]) {
+void bfs(node start, vector<vector<int>> &memo) {
     bool visited[105][105] = {};
     deque<node> q;
 
-    q.push_back({start.x, start. y});
+    q.push_back({start.x, start.y});
     visited[start.y][start.x] = true;
+    memo[start.y][start.x] = 0;
 
     while (!q.empty()) {
         node now = q.front();
@@ -41,7 +42,7 @@ void bfs(node start, int (*memo)[105]) {
             int nextX = now.x + dx[i];
             int nextY = now.y + dy[i];
 
-            if (nextY < 0 || nextY >= h+2 || nextX < 0 || nextX >= w+2)
+            if (nextY < 0 || nextY >= h + 2 || nextX < 0 || nextX >= w + 2)
                 continue;
 
             if (visited[nextY][nextX] || map[nextY][nextX] == '*')
@@ -52,7 +53,7 @@ void bfs(node start, int (*memo)[105]) {
             if (map[nextY][nextX] == '#') {
                 memo[nextY][nextX] = memo[now.y][now.x] + 1;
                 q.push_back({nextX, nextY});
-            }else{
+            } else {
                 memo[nextY][nextX] = memo[now.y][now.x];
                 q.push_front({nextX, nextY});
             }
@@ -61,9 +62,9 @@ void bfs(node start, int (*memo)[105]) {
 }
 
 void print(int (*memo)[105]) {
-    for (int i = 0; i < h+2; i++) {
-        for (int j = 0; j < w+2; j++) {
-                cout << memo[i][j] << " ";
+    for (int i = 0; i < h + 2; i++) {
+        for (int j = 0; j < w + 2; j++) {
+            cout << memo[i][j] << " ";
         }
         cout << endl;
     }
@@ -84,14 +85,14 @@ int main() {
 
         cin >> h >> w;
 
-        int memo[3][105][105] = {};
+        vector<vector<vector<int>>> memo(3, vector<vector<int>>(105, vector<int>(105, 1000001)));
 
         vector<node> startPoint;
-        startPoint.push_back({0,0});
+        startPoint.push_back({0, 0});
 
-        for (int i = 0; i < h+2; i++) {
-            for (int j = 0; j < w+2; j++) {
-                if (i == 0 || i == h+1 || j == 0 || j == w+1)
+        for (int i = 0; i < h + 2; i++) {
+            for (int j = 0; j < w + 2; j++) {
+                if (i == 0 || i == h + 1 || j == 0 || j == w + 1)
                     map[i][j] = '.';
                 else {
                     cin >> map[i][j];
@@ -102,14 +103,13 @@ int main() {
             }
         }
 
-        for (int i = 0 ; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             bfs(startPoint[i], memo[i]);
-            //print(memo[i]);
         }
 
         int ans = 1e9;
-        for (int i = 0; i < h+2; i++) {
-            for (int j = 0; j < w+2; j++) {
+        for (int i = 0; i < h + 2; i++) {
+            for (int j = 0; j < w + 2; j++) {
                 if (map[i][j] == '*')
                     continue;
 

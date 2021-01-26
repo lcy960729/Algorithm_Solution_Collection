@@ -1,12 +1,8 @@
-//
-// Created by CY on 2020-09-25.
-//
-
 #include <iostream>
 #include <algorithm>
 #include <cstring>
 #include <vector>
-#include <queue>
+#include <cmath>
 #include <stack>
 
 #define pii pair<int, int>
@@ -16,116 +12,66 @@
 
 using namespace std;
 
-int N;
-
-void print(vector<vector<int>> &board) {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            cout << board[i][j] << " ";
-        }
-        cout << "\n";
-    }
-    cout << "\n";
-}
-
 void rotate(vector<vector<int>> &board) {
-    vector<vector<int>> temp(board.size());
-    copy(board.begin(), board.end(), temp.begin());
-
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            board[i][j] = temp[N - 1 - j][i];
+    vector<vector<int>> temp(board);
+    int size = temp.size();
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            board[i][j] = temp[size - j - 1][i];
         }
-    }
-}
-
-void reverse(vector<vector<int>> &board) {
-    for (int i = 0; i < N; i++) {
-        reverse(board[i].begin(), board[i].end());
     }
 }
 
 void move(vector<vector<int>> &board) {
-    stack<int> st;
-    stack<int> result;
-    for (int i = 0; i < N; i++) {
-        for (int j = N - 1; j >= 0; j--) {
-            if (board[i][j] == 0)
+    vector<vector<int>> temp(board);
+    int size = temp.size();
+
+    for (int i = 0; i < size; ++i) {
+        int index = 0;
+        int pre = 0;
+        for (int j = 0; j < size; ++j) {
+            if (temp[j][i] == 0)
                 continue;
 
-            if (!st.empty() && board[i][j] == st.top()) {
-                st.pop();
-                result.push(board[i][j] * 2);
+            int cur = temp[j][i];
+            board[j][i] = 0;
 
-                while(!st.empty()){
-                    result.push(st.top());
-                    st.pop();
-                }
-            } else {
-                st.push(board[i][j]);
-            }
-        }
-
-        while (!st.empty()) {
-            result.push(st.top());
-            st.pop();
-        }
-
-        for (int j = 0; j < N; j++) {
-            if (j < N - result.size()) {
-                board[i][j] = 0;
-            } else {
-                board[i][j] = result.top();
-                result.pop();
+            if (cur != pre) {
+                board[index++][i] = cur;
+                pre = cur;
+            }else{
+                board[index-1][i] = cur * 2;
+                pre = 0;
             }
         }
     }
 }
 
-int solve(vector<vector<int>> &board, int depth) {
-    if (depth == 5) {
-        int result = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                result = max(result, board[i][j]);
-            }
+int solve(int cnt, vector<vector<int>> board) {
+    if (cnt == 5) {
+        int mx = 0;
+        for (int i = 0; i < board.size(); ++i) {
+            mx = max(mx, *max_element(board[i].begin(), board[i].end()));
         }
-        return result;
+
+        return mx;
     }
 
     int ret = 0;
-    for (int i = 0; i < 4; i++) {
-        vector<vector<int>> temp(board.size());
-        copy(board.begin(), board.end(), temp.begin());
-
-        if (i == 1) {
-            reverse(temp);
-        } else if (i == 2) {
+    for (int i = 0; i < 4; ++i) {
+        vector<vector<int>> temp(board);
+        for (int j = 0; j < i; ++j)
             rotate(temp);
-        } else if (i == 3) {
-            reverse(temp);
-            rotate(temp);
-        }
 
         move(temp);
 
-        if (i == 1) {
-            reverse(temp);
-        } else if (i == 2) {
-            rotate(temp);
-            rotate(temp);
-            rotate(temp);
-        } else if (i == 3) {
-            reverse(temp);
-            rotate(temp);
-            rotate(temp);
-            rotate(temp);
-        }
+        if (i != 0)
+            for (int j = 0; j < 4 - i; ++j)
+                rotate(temp);
 
-        //print(temp);
-
-        ret = max(ret, solve(temp, depth + 1));
+        ret = max(ret, solve(cnt + 1, temp));
     }
+
     return ret;
 }
 
@@ -138,25 +84,15 @@ int main() {
     cin.tie(nullptr);
     cout.tie(nullptr);
 
+    int N;
     cin >> N;
-    vector<vector<int>> board(N, vector<int>(N));
 
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            cin >> board[i][j];
+    vector<vector<int>> board(N, vector<int>(N));
+    for (auto &i : board) {
+        for (auto &j : i) {
+            cin >> j;
         }
     }
 
-    print(board);
-    rotate(board);
-
-    move(board);
-
-    rotate(board);
-    rotate(board);
-    rotate(board);
-
-    print(board);
-    //cout << solve(board, 0) << "\n";
-    //오른쪽 왼쪽 다음엔 위쪽 아니면 아래
+    cout << solve(0, board);
 }
