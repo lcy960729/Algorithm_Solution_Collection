@@ -1,7 +1,3 @@
-//
-// Created by LeeChanYoung on 2020/12/30.
-//
-
 #include <iostream>
 #include <algorithm>
 #include <cstring>
@@ -24,30 +20,34 @@ int main() {
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    int n, s;
-    cin >> n >> s;
+    int n;
+    cin >> n;
 
-    vector<int> a(n);
+    vector<ll> a(n);
     for (auto &i : a) {
         cin >> i;
     }
 
-    int l = 0, r = 0;
-    int sum = a[0];
-    int ans = 1e9;
+    sort(a.begin(), a.end());
+    ll mn = LL_MAX;
 
-    while (l <= r && r < n) {
-        if (sum < s) {
-            sum += a[r];
-            r++;
+    pii ans;
+    int s = 0, e = a.size() - 1;
+    while (s < e) {
+        ll sum = a[s] + a[e];
+        if (llabs(sum) < mn) {
+            mn = llabs(sum);
+
+            ans.first = s;
+            ans.second = e;
+        }
+
+        if (sum < 0) {
+            s++;
         } else {
-            ans = min(ans, r - l + 1);
-
-            if (l <= r){
-                sum -= a[l++];
-            }
+            e--;
         }
     }
 
-    cout << (ans == 1e9 ? 0 : ans) << "\n";
+    cout << a[ans.first] << ' ' << a[ans.second];
 }
