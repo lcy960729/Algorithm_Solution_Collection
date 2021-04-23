@@ -1,7 +1,9 @@
 /cmake-build-debug
 /Competition
-/CMakeLists.txt
-/fun.cpp
-/input.txt
-/test.cpp
+CMakeLists.txt
+fun.cpp
+input.txt
+test.cpp
 
+.DS_Store
+/.idea
