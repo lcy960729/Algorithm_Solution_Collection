@@ -3,6 +3,7 @@
 #include <cstring>
 #include <vector>
 #include <cmath>
+#include <stack>
 
 #define pii pair<int, int>
 #define ll long long
@@ -20,5 +21,17 @@ int main(){
     cin.tie(nullptr);
     cout.tie(nullptr);
 
+    string str, ans;
+    cin >> str;
 
+    ans = str[0];
+    for (int i = 1; i < str.length(); ++i) {
+        if (str[i-1] >= str[i] && ans[0] >= str[i]){
+            ans = str[i] + ans;
+        }else{
+            ans += str[i];
+        }
+    }
+
+    cout << ans << '\n';
 }
