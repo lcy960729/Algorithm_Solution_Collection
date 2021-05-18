@@ -1,7 +1,7 @@
 /cmake-build-debug
 /Competition
 CMakeLists.txt
-fun.cpp
+postOrder.cpp
 input.txt
 test.cpp
 
