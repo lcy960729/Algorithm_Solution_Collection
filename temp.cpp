@@ -1,102 +1,111 @@
-//#include <iostream>
-//#include <algorithm>
-//#include <cstring>
-//#include <vector>
-//#include <cmath>
-//#include <map>
-//#include <list>
-//
-//#define pii pair<int, int>
-//#define ll long long
-//#define Int_MAX 1e9
-//#define LL_MAX 3e18
-//
-//using namespace std;
-//
-//int main() {
-//#ifdef LOCAL
-//    freopen("input.txt", "r", stdin);
-//#endif
-//
-//    ios::sync_with_stdio(false);
-//    cin.tie(nullptr);
-//    cout.tie(nullptr);
-//
-//    int N, K;
-//    cin >> N >> K;
-//
-//    string s;
-//    cin >> s;
-//
-//    pii cur;
-//
-//    map<int, list<pii>> plus, minus;
-//
-//    vector<pii > flowers(N);
-//    for (int i = 0; i < N; ++i) {
-//        cin >> flowers[i].second >> flowers[i].first;
-//
-//        if (i == 0) {
-//            cur = flowers[i];
-//        }
-//    }
-//
-//    for (int i = 0; i < N; ++i) {
-//        int sum = flowers[i].first + flowers[i].second;
-//        int diff = flowers[i].first - flowers[i].second;
-//
-//        if (plus.find(sum) == plus.end())
-//            plus.insert({sum, list<pii >()});
-//
-//        if (minus.find(diff) == minus.end())
-//            minus.insert({diff, list<pii >()});
-//
-//        for (int j = 0; j < N; ++j) {
-//            if (sum == flowers[j].first + flowers[j].second) {
-//                plus[sum].push_back(flowers[j]);
-//            } else if (diff == flowers[j].first + flowers[j].second) {
-//                minus[diff].push_back(flowers[j]);
-//            }
-//        }
-//    }
-//
-//    for (auto &list : plus) {
-//        list.second.push_back(make_pair(1,1));
-//        list.second.sort();
-//    }
-//
-//    for (auto &list : minus) {
-//        list.second.sort();
-//    }
-//
-//    for (char c : s) {
-//        //A, D => D에서 A로 올라감 \
-//        //B, C => C에서 B로 올라감 /
-//
-//        int sum = cur.first + cur.second;
-//        int diff = cur.first - cur.second;
-//
-//        list < pii > *plist;
-//        if (c == 'A' || c == 'D') {
-//            plist = &plus[sum];
-//        } else {
-//            plist = &minus[diff];
-//        }
-//
-//        list<pii >::iterator now = find(plist->begin(), plist->end(), cur);
-//        if (now == plist->end()) continue;
-//
-//        list<pii >::iterator next = now;
-//        if (c == 'A' || c == 'B') {
-//            next++;
-//        } else {
-//            next--;
-//        }
-//
-//        if (next != plist->end() && next != --plist->begin()) {
-//            plist->erase(now);
-//        }
-//    }
-//
-//    cout << cur.second << ' ' << cur.first << '\n';
-//}
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <vector>
+#include <cmath>
+#include <queue>
+
+#define pii pair<int, int>
+#define ll long long
+#define Int_MAX 1e9
+#define LL_MAX 3e18
+
+using namespace std;
+
+int dy[] = {0, 1, 0, -1};
+int dx[] = {1, 0, -1, 0};
+
+int N, M;
+int mx = 0, mn = 1e9;
+vector<vector<int>> ground;
+vector<vector<int>> water;
+vector<vector<bool>> visited;
+
+void bfs(int y, int x, int h) {
+    queue<pii > q;
+    q.push({y, x});
+    visited[y][x] = true;
+
+    while (!q.empty()) {
+        pii cur = q.front();
+        q.pop();
+
+        water[cur.first][cur.second]--;
+
+        for (int i = 0; i < 4; ++i) {
+            int ny = cur.first + dy[i];
+            int nx = cur.second + dx[i];
+
+            if (ny < 0 || ny >= N || nx < 0 || nx >= M) continue;
+            if (visited[ny][nx]) continue;
+
+            if (ground[ny][nx] + water[ny][nx] == h && water[ny][nx] > 0) {
+                q.push({ny, nx});
+                visited[ny][nx] = true;
+            }
+        }
+    }
+}
+
+int main() {
+#ifdef LOCAL
+    freopen("input.txt", "r", stdin);
+#endif
+
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
+    cin >> N >> M;
+
+    ground.assign(N, vector<int>(M, 0));
+    for (int i = 0; i < N; ++i) {
+        string s;
+        cin >> s;
+
+        for (int j = 0; j < M; ++j) {
+            ground[i][j] = s[j] - '0';
+
+            mx = max(mx, ground[i][j]);
+            mn = min(mn, ground[i][j]);
+        }
+    }
+
+    water.assign(N, vector<int>(M));
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < M; ++j) {
+            water[i][j] = mx - ground[i][j];
+        }
+    }
+
+    for (int h = mx; h > mn; --h) {
+        visited.assign(N, vector<bool>(M, false));
+
+        for (int i = 0; i < N; ++i) {
+            for (int j = 0; j < M; ++j) {
+                if (water[i][j] <= 0 || visited[i][j]) continue;
+
+                for (int k = 0; k < 4; ++k) {
+                    int ny = i + dy[k];
+                    int nx = j + dx[k];
+
+                    if ((ny < 0 || ny >= N || nx < 0 || nx >= M) ||
+                        ground[ny][nx] + water[ny][nx] < ground[i][j] + water[i][j]) {
+                        bfs(i, j, h);
+                        break;
+                    }
+                }
+            }
+        }
+
+    }
+
+    int ans = 0;
+    for (auto &i : water) {
+        for (auto &j : i) {
+            ans += j;
+        }
+    }
+
+    cout << ans << '\n';
+}
