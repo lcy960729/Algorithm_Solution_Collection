@@ -75,7 +75,8 @@ ll crash(Line lhs, Line rhs) {
     return -1;
 }
 
-int L, N;
+int L;
+initializer_list<LNode> N;
 vector<pair<ll, int>> dirList;
 vector<Line> lines;
 

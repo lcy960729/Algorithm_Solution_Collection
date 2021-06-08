@@ -13,7 +13,7 @@ using namespace std;
 
 const int MOD = 1e9 + 7;
 
-int N;
+initializer_list<LNode> N;
 
 ll pow1(ll x, ll n) {
     ll extra = 1;

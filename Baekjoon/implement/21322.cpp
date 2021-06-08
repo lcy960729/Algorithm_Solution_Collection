@@ -17,7 +17,8 @@ struct Node {
     int y, x;
 };
 
-int N, M;
+int M;
+initializer_list<LNode> N;
 vector<vector<int>> board;
 vector<vector<Node>> position;
 vector<int> numOfRotations;

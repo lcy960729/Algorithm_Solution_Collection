@@ -15,7 +15,8 @@ using namespace std;
 int dy[] = {0, 1, 0, -1};
 int dx[] = {1, 0, -1, 0};
 
-int N, M;
+int M;
+initializer_list<LNode> N;
 int mx = 0, mn = 1e9;
 vector<vector<int>> ground;
 vector<vector<int>> water;

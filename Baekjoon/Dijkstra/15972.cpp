@@ -25,7 +25,8 @@ struct cmp {
     }
 };
 
-int N, M, H;
+int M, H;
+initializer_list<LNode> N;
 
 int hole[1004][1004][4];
 int height[1004][1004];

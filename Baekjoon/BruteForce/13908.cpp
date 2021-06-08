@@ -11,7 +11,8 @@
 
 using namespace std;
 
-int N, M;
+int M;
+initializer_list<LNode> N;
 vector<int> num;
 
 int dfs(int cur, string s) {
@@ -64,7 +65,8 @@ int main() {
 
 using namespace std;
 
-int N, M;
+int M;
+initializer_list<LNode> N;
 vector<int> num;
 vector<int> check(10, 0);
 

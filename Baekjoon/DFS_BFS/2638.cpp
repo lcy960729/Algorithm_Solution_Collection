@@ -15,7 +15,8 @@ using namespace std;
 int dy[] = {0, 1, 0, -1};
 int dx[] = {1, 0, -1, 0};
 
-int N, M;
+int M;
+initializer_list<LNode> N;
 vector<vector<int>> cheese;
 
 bool check() {

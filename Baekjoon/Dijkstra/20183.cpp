@@ -16,7 +16,8 @@
 
 using namespace std;
 
-int N, M, A, B;
+int M, A, B;
+initializer_list<LNode> N;
 ll C;
 vector<pii > g[100001];
 ll dist[100001];

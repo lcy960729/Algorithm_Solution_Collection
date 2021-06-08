@@ -20,7 +20,8 @@ struct Point {
     int x = -1, y = -1;
 };
 
-int A, B, C, N;
+int A, B, C;
+initializer_list<LNode> N;
 
 map<string, int> gasStations;
 map<string, Point> points;

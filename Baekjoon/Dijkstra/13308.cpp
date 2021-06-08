@@ -14,7 +14,8 @@ ll dist[2501][2501];
 
 int cost[2501];
 
-int N, M;
+int M;
+initializer_list<LNode> N;
 
 void dijk(){
     priority_queue<pair<ll, pair<int, int>>> pq;

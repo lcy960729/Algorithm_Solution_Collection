@@ -15,7 +15,8 @@
 
 using namespace std;
 
-int N, M;
+int M;
+initializer_list<LNode> N;
 int company[1001];
 bool fin[1001] = {};
 int dist[1001];

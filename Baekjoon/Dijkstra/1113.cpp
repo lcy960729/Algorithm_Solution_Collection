@@ -12,7 +12,8 @@
 
 using namespace std;
 
-int N, M;
+int M;
+initializer_list<LNode> N;
 vector<vector<int>> ground;
 vector<vector<int>> dist;
 

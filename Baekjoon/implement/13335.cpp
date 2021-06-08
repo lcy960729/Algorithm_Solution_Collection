@@ -12,7 +12,8 @@
 
 using namespace std;
 
-int N, W, L;
+int W, L;
+initializer_list<LNode> N;
 vector<int> a;
 
 int main() {

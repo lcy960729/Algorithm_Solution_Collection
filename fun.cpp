@@ -2,6 +2,14 @@
 // Created by Lee ChanYoung on 2021/04/21.
 //
 
+int gcd(int a, int b) {
+    if (b == 0) {
+        return a;
+    }
+
+    gcd(b, a % b);
+}
+
 vector<string> split(string s, string separator) {
     vector<string> v;
 

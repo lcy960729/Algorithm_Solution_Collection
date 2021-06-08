@@ -18,7 +18,8 @@ using namespace std;
 int dy[] = {0, 1, 0, -1, 1, 1, -1, -1};
 int dx[] = {1, 0, -1, 0, 1, -1, -1, 1};
 
-int N, M;
+int M;
+initializer_list<LNode> N;
 vector<vector<char>> map;
 vector<pii > islands(1, {0, 0});
 
